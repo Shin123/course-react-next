@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react'
+import { initialItems } from '../lib/constants'
 
 export const ItemsContext = createContext()
 
