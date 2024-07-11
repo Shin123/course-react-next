@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { initialItems } from '../lib/constants'
+import EmptyView from './EmptyView'
 
 export default function ItemList({
   items,
@@ -7,7 +8,9 @@ export default function ItemList({
   handleToggleItem,
 }) {
   return (
-    <ul>
+    <ul className="item-list">
+      {items.length === 0 && <EmptyView />}
+
       {items.map((item) => (
         <Item
           key={item.id}
@@ -28,7 +31,7 @@ function Item({ item, handleDeleteItem, handleToggleItem }) {
           type="checkbox"
           checked={item.packed}
           onChange={() => handleToggleItem(item.id)}
-        />{' '}
+        />
         {item.name}
       </label>
 
