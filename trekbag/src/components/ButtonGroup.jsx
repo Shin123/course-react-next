@@ -1,12 +1,6 @@
 import React from 'react'
 import Button from './Button'
-
-const secondaryButtons = [
-  'Mark all as complete',
-  'Mark all as incomplete',
-  'Reset to initial',
-  'Remove all items',
-]
+import { secondaryButtons } from '../lib/constants'
 
 export default function ButtonGroup() {
   return (
