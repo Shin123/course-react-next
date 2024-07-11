@@ -3,3 +3,5 @@
 ### Project 1: [fancy-counter](https://fancy-counter-ityy8wggf-shin123s-projects.vercel.app/)
 
 ### Project 2: [word-analytics](https://word-analytics-xi.vercel.app/)
+
+### Project 3: [trekbag](https://trekbag-gold.vercel.app/)
