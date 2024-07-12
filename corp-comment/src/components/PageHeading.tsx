@@ -1,5 +1,7 @@
-import React from 'react'
-
 export default function PageHeading() {
-  return <div>PageHeading</div>
+  return (
+    <h1>
+      Gve Feedback. <span>Publicly.</span>
+    </h1>
+  )
 }
