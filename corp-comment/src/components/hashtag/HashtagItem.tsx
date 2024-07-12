@@ -1,10 +1,11 @@
 type Props = {
   company: string
+  onSelectCompany: (company: string) => void
 }
-export default function HashtagItem({ company }: Props) {
+export default function HashtagItem({ company, onSelectCompany }: Props) {
   return (
     <li>
-      <button>{`#${company}`}</button>
+      <button onClick={() => onSelectCompany(company)}>{`#${company}`}</button>
     </li>
   )
 }
