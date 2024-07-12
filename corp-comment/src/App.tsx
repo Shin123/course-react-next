@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import Container from './components/Container'
+import Container from './components/layout/Container'
 import Footer from './components/Footer'
 import HashtagList from './components/HashtagList'
 import { TFeedbackItem } from './lib/types'
@@ -9,7 +9,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
 
-  const handleAddToList = (text: string) => {
+  const handleAddToList = async (text: string) => {
     const companyName = text
       .split(' ')
       .find((word: string) => word.includes('#'))!
@@ -25,6 +25,18 @@ function App() {
     }
 
     setFeedbackItems([...feedbackItems, newItem])
+
+    await fetch(
+      'https://bytegrad.com/course-assets/projects/corpcomment/api/feedbacks',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(newItem),
+      }
+    )
   }
 
   useEffect(() => {
