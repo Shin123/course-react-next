@@ -1,5 +1,3 @@
-import React from 'react'
-
 export default function PaginationControls() {
-  return <div>PaginationControls</div>
+  return <section className="pagination"></section>
 }
