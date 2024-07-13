@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useJobItems } from '../lib/hooks'
+import { useActiveId, useJobItem, useJobItems } from '../lib/hooks'
 import Background from './Background'
 import Container from './Container'
 import Footer from './Footer'
@@ -8,6 +8,10 @@ import Header from './Header'
 function App() {
   const [searchText, setSearchText] = useState('')
   const [jobItems, isLoading] = useJobItems(searchText)
+  const activeId = useActiveId()
+
+  const jobItem = useJobItem(activeId)
+  console.log('🚀 ~ App ~ jobItem:', jobItem)
 
   return (
     <>
