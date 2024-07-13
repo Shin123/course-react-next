@@ -38,6 +38,13 @@ export function useJobItem(id: number | null) {
   return jobItem
 }
 
+export function useActiveJobItem() {
+  const activeId = useActiveId()
+  const jobItem = useJobItem(activeId)
+
+  return jobItem
+}
+
 export function useJobItems(searchText: string) {
   const [jobItems, setJobItems] = useState<TJobItem[]>([])
   const [isLoading, setIsLoading] = useState(false)

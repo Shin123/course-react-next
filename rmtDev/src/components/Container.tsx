@@ -3,15 +3,9 @@ import JobItemContent from './JobItemContent'
 import Sidebar from './Sidebar'
 
 type Props = {
-  jobItems: TJobItem[]
-  isLoading: boolean
+  children: React.ReactNode
 }
 
-export default function Container({ jobItems, isLoading }: Props) {
-  return (
-    <div className="container">
-      <Sidebar jobItems={jobItems} isLoading={isLoading} />
-      <JobItemContent />
-    </div>
-  )
+export default function Container({ children }: Props) {
+  return <div className="container">{children}</div>
 }

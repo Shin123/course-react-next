@@ -1,6 +1,11 @@
+import { TJobItem } from '../lib/types'
 import BookmarkIcon from './BookmarkIcon'
 
-export default function JobItemContent() {
+type Props = {
+  jobItem: TJobItem
+}
+
+export default function JobItemContent({ jobItem }: Props) {
   return <EmptyJobContent />
   return (
     <section className="job-details">

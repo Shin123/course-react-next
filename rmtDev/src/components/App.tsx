@@ -1,26 +1,54 @@
 import { useState } from 'react'
-import { useActiveId, useJobItem, useJobItems } from '../lib/hooks'
+import { useActiveJobItem, useJobItems } from '../lib/hooks'
 import Background from './Background'
+import BookmarksButton from './BookmarksButton'
 import Container from './Container'
 import Footer from './Footer'
 import Header from './Header'
+import Logo from './Logo'
+import SearchForm from './SearchForm'
+import Sidebar from './Sidebar'
+import JobItemContent from './JobItemContent'
+import SidebarTop from './SidebarTop'
+import ResultsCount from './ResultsCount'
+import SortingControls from './SortingControls'
+import JobList from './JobList'
+import PaginationControls from './PaginationControls'
+import HeaderTop from './HeaderTop'
 
 function App() {
   const [searchText, setSearchText] = useState('')
   const [jobItems, isLoading] = useJobItems(searchText)
-  const activeId = useActiveId()
+  const jobItem = useActiveJobItem()
 
-  const jobItem = useJobItem(activeId)
   console.log('🚀 ~ App ~ jobItem:', jobItem)
 
   return (
     <>
       <Background />
 
-      <Header searchText={searchText} setSearchText={setSearchText} />
+      <Header>
+        <HeaderTop>
+          <Logo />
+          <BookmarksButton />
+        </HeaderTop>
+        <SearchForm searchText={searchText} setSearchText={setSearchText} />
+      </Header>
 
-      <Container jobItems={jobItems} isLoading={isLoading} />
+      <Container>
+        <Sidebar>
+          <SidebarTop>
+            <ResultsCount />
+            <SortingControls />
+          </SidebarTop>
 
+          <JobList jobItems={jobItems} isLoading={isLoading} />
+
+          <PaginationControls />
+        </Sidebar>
+
+        <JobItemContent jobItem={jobItem} />
+      </Container>
       <Footer />
     </>
   )
