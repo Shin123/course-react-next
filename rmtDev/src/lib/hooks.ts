@@ -3,11 +3,14 @@ import { TJobItem, TJobItemExpanded } from './types'
 import { BASE_API_URL } from './constants'
 
 export function useActiveId() {
-  const [activeId, setActiveId] = useState<number | null>(null)
+  const [activeId, setActiveId] = useState<number | null>(
+    +window.location.hash.slice(1) || null
+  )
 
   useEffect(() => {
     const handleHashChange = () => {
       const id = +window.location.hash.slice(1)
+      console.log('🚀 ~ handleHashChange ~ id:', id)
       setActiveId(id)
     }
     window.addEventListener('hashchange', handleHashChange)
@@ -50,13 +53,14 @@ export function useActiveJobItem() {
   const activeId = useActiveId()
   const { isLoading, jobItem } = useJobItem(activeId)
 
-  return [jobItem, isLoading] as const
+  return { jobItem, isLoading } as const
 }
 
 export function useJobItems(searchText: string) {
   const [jobItems, setJobItems] = useState<TJobItem[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
+  const totalNumberOfResults = jobItems.length
   const jobItemsSliced = jobItems.slice(0, 7)
 
   useEffect(() => {
@@ -72,5 +76,5 @@ export function useJobItems(searchText: string) {
     fetchData()
   }, [searchText])
 
-  return [jobItemsSliced, isLoading] as const
+  return { jobItemsSliced, isLoading, totalNumberOfResults } as const
 }
