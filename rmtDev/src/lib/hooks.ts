@@ -9,7 +9,7 @@ type JobItemApiResponse = {
 }
 
 const fetchJobItem = async (id: number): Promise<JobItemApiResponse> => {
-  const response = await fetch(`${BASE_API_URL}/${3232}`)
+  const response = await fetch(`${BASE_API_URL}/${id}`)
   if (!response.ok) {
     const errorText = await response.text()
     throw new Error(`Error: ${response.status} - ${errorText}`)
@@ -59,27 +59,54 @@ export function useActiveJobItem() {
   return { jobItem, isLoading } as const
 }
 
+// export function useJobItems(searchText: string) {
+//   const [jobItems, setJobItems] = useState<TJobItem[]>([])
+//   const [isLoading, setIsLoading] = useState(false)
+
+//   useEffect(() => {
+//     if (!searchText) return
+
+//     const fetchData = async () => {
+//       setIsLoading(true)
+//       const response = await fetch(`${BASE_API_URL}?search=${searchText}`)
+//       const data = await response.json()
+//       setJobItems(data.jobItems)
+//       setIsLoading(false)
+//     }
+//     fetchData()
+//   }, [searchText])
+
+//   return { jobItems, isLoading } as const
+// }
+
+type JobItemsApiResponse = {
+  jobItems: TJobItem[]
+  sorted: boolean
+  public: boolean
+}
+
+const fetchJobItems = async (
+  searchText: string
+): Promise<JobItemsApiResponse> => {
+  const response = await fetch(`${BASE_API_URL}?search=${searchText}`)
+  if (!response.ok) {
+    const errorText = await response.text()
+    throw new Error(`Error: ${response.status} - ${errorText}`)
+  }
+  const data = await response.json()
+  return data
+}
+
 export function useJobItems(searchText: string) {
-  const [jobItems, setJobItems] = useState<TJobItem[]>([])
-  const [isLoading, setIsLoading] = useState(false)
-
-  const totalNumberOfResults = jobItems.length
-  const jobItemsSliced = jobItems.slice(0, 7)
-
-  useEffect(() => {
-    if (!searchText) return
-
-    const fetchData = async () => {
-      setIsLoading(true)
-      const response = await fetch(`${BASE_API_URL}?search=${searchText}`)
-      const data = await response.json()
-      setJobItems(data.jobItems)
-      setIsLoading(false)
-    }
-    fetchData()
-  }, [searchText])
-
-  return { jobItemsSliced, isLoading, totalNumberOfResults } as const
+  const { data, isLoading } = useQuery({
+    queryKey: ['job-items', searchText],
+    queryFn: () => fetchJobItems(searchText),
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5,
+    enabled: !!searchText,
+    retry: false,
+  })
+  return { jobItems: data?.jobItems, isLoading }
 }
 
 export function useDebounce<T>(value: T, delay: number = 500): T {
