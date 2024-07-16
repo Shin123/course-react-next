@@ -1,5 +1,8 @@
 import { useState } from 'react'
-import { useDebounce, useJobItems } from '../lib/hooks'
+import { Toaster } from 'react-hot-toast'
+import { RESULTS_PER_PAGE } from '../lib/constants'
+import { useDebounce, useSearchQuery } from '../lib/hooks'
+import { PageDirection, SortBy } from '../lib/types'
 import Background from './Background'
 import BookmarksButton from './BookmarksButton'
 import Container from './Container'
@@ -15,14 +18,11 @@ import SearchForm from './SearchForm'
 import Sidebar from './Sidebar'
 import SidebarTop from './SidebarTop'
 import SortingControls from './SortingControls'
-import { Toaster } from 'react-hot-toast'
-import { RESULTS_PER_PAGE } from '../lib/constants'
-import { PageDirection, SortBy } from '../lib/types'
 
 function App() {
   const [searchText, setSearchText] = useState('')
   const debounceSearchText = useDebounce(searchText, 500)
-  const { jobItems, isLoading } = useJobItems(debounceSearchText)
+  const { jobItems, isLoading } = useSearchQuery(debounceSearchText)
   const [currentPage, setCurrentPage] = useState(1)
   const [sortBy, setSortBy] = useState<SortBy>('relevant')
 

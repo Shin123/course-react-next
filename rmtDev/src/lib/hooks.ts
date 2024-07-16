@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQueries, useQuery } from '@tanstack/react-query'
 import { useContext, useEffect, useState } from 'react'
 import { BASE_API_URL } from './constants'
 import { TJobItem, TJobItemExpanded } from './types'
@@ -45,14 +45,30 @@ export function useJobItem(id: number | null) {
   const { data, isLoading } = useQuery({
     queryKey: ['job-item', id],
     queryFn: () => (id ? fetchJobItem(id) : null),
-
-    refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5,
-    enabled: !!id,
-    retry: false,
   })
   const jobItem = data?.jobItem
   return { jobItem, isLoading } as const
+}
+
+export function useJobItems(ids: number[]) {
+  const results = useQueries({
+    queries: ids.map((id) => ({
+      queryKey: ['job-item', id],
+      queryFn: () => fetchJobItem(id),
+      refetchOnWindowFocus: false,
+      staleTime: 1000 * 60 * 5,
+      enabled: !!id,
+      retry: false,
+    })),
+  })
+  const jobItems = results
+    .map((result) => result.data?.jobItem)
+    // .filter((jobItem) => jobItem !== undefined)
+    .filter((jobItem) => Boolean(jobItem)) as TJobItemExpanded[]
+
+  const isLoading = results.some((result) => result.isLoading)
+
+  return { jobItems, isLoading }
 }
 
 export function useActiveJobItem() {
@@ -101,7 +117,7 @@ const fetchJobItems = async (
   return data
 }
 
-export function useJobItems(searchText: string) {
+export function useSearchQuery(searchText: string) {
   const { data, isLoading } = useQuery({
     queryKey: ['job-items', searchText],
     queryFn: () => fetchJobItems(searchText),
