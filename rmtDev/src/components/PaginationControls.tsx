@@ -1,7 +1,8 @@
 import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons'
+import { PageDirection } from '../lib/types'
 
 type Props = {
-  onChangePage: (direction: 'next' | 'previous') => void
+  onChangePage: (direction: PageDirection) => void
   currentPage: number
   totalNumberOfPage: number
 }
