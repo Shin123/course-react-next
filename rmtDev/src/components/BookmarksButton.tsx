@@ -12,8 +12,8 @@ export default function BookmarksButton() {
     const handleClick = (e: MouseEvent) => {
       if (
         e.target instanceof HTMLElement &&
-        !e.target.closest('.bookmarks-btn') &&
-        !e.target.closest('.bookmarks-popover')
+        !buttonRef.current?.contains(e.target) &&
+        !popoverRef.current?.contains(e.target)
       ) {
         setIsOpen(false)
       }
