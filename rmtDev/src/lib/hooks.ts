@@ -1,6 +1,22 @@
+import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
-import { TJobItem, TJobItemExpanded } from './types'
 import { BASE_API_URL } from './constants'
+import { TJobItem, TJobItemExpanded } from './types'
+
+type JobItemApiResponse = {
+  public: boolean
+  jobItem: TJobItemExpanded
+}
+
+const fetchJobItem = async (id: number): Promise<JobItemApiResponse> => {
+  const response = await fetch(`${BASE_API_URL}/${3232}`)
+  if (!response.ok) {
+    const errorText = await response.text()
+    throw new Error(`Error: ${response.status} - ${errorText}`)
+  }
+  const data = await response.json()
+  return data
+}
 
 export function useActiveId() {
   const [activeId, setActiveId] = useState<number | null>(
@@ -10,7 +26,6 @@ export function useActiveId() {
   useEffect(() => {
     const handleHashChange = () => {
       const id = +window.location.hash.slice(1)
-      console.log('🚀 ~ handleHashChange ~ id:', id)
       setActiveId(id)
     }
     window.addEventListener('hashchange', handleHashChange)
@@ -24,29 +39,17 @@ export function useActiveId() {
 }
 
 export function useJobItem(id: number | null) {
-  const [jobItem, setJobItem] = useState<TJobItemExpanded | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const { data, isLoading } = useQuery({
+    queryKey: ['job-item', id],
+    queryFn: () => (id ? fetchJobItem(id) : null),
 
-  useEffect(() => {
-    if (!id) return
-
-    const fetchData = async () => {
-      setIsLoading(true)
-      try {
-        const response = await fetch(`${BASE_API_URL}/${id}`)
-        const data = await response.json()
-        setJobItem(data.jobItem)
-      } catch (error) {
-        console.error(error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [id])
-
-  return { isLoading, jobItem }
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5,
+    enabled: !!id,
+    retry: false,
+  })
+  const jobItem = data?.jobItem
+  return { jobItem, isLoading } as const
 }
 
 export function useActiveJobItem() {
