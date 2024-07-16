@@ -11,23 +11,37 @@ export default function SortingControls({ onClick, sortBy }: Props) {
     <section className="sorting">
       <ArrowDownIcon />
 
-      <button
+      <SortingButton
         onClick={() => onClick('relevant')}
-        className={`sorting__button sorting__button--relevant ${
-          sortBy === 'relevant' ? 'sorting__button--active' : ''
-        }`}
+        isActive={sortBy === 'relevant'}
       >
         Relevant
-      </button>
-
-      <button
+      </SortingButton>
+      <SortingButton
         onClick={() => onClick('recent')}
-        className={`sorting__button sorting__button--recent ${
-          sortBy === 'recent' ? 'sorting__button--active' : ''
-        }`}
+        isActive={sortBy === 'recent'}
       >
         Recent
-      </button>
+      </SortingButton>
     </section>
+  )
+}
+
+type SortingButtonProps = {
+  onClick: () => void
+  isActive: boolean
+  children: React.ReactNode
+}
+
+function SortingButton({ onClick, isActive, children }: SortingButtonProps) {
+  return (
+    <button
+      onClick={onClick}
+      className={`sorting__button sorting__button--relevant ${
+        isActive ? 'sorting__button--active' : ''
+      }`}
+    >
+      {children}
+    </button>
   )
 }
