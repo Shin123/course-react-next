@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { BASE_API_URL } from './constants'
 import { TJobItem, TJobItemExpanded } from './types'
+import { handleError } from './utils'
 
 type JobItemApiResponse = {
   public: boolean
@@ -12,6 +13,7 @@ const fetchJobItem = async (id: number): Promise<JobItemApiResponse> => {
   const response = await fetch(`${BASE_API_URL}/${id}`)
   if (!response.ok) {
     const errorText = await response.text()
+    handleError(errorText)
     throw new Error(`Error: ${response.status} - ${errorText}`)
   }
   const data = await response.json()
@@ -90,8 +92,9 @@ const fetchJobItems = async (
 ): Promise<JobItemsApiResponse> => {
   const response = await fetch(`${BASE_API_URL}?search=${searchText}`)
   if (!response.ok) {
-    const errorText = await response.text()
-    throw new Error(`Error: ${response.status} - ${errorText}`)
+    const errorText = await response.json()
+    handleError(errorText)
+    throw new Error(`Error: ${errorText?.description || response.status}`)
   }
   const data = await response.json()
   return data
