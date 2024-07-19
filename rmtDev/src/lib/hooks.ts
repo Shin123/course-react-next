@@ -4,6 +4,7 @@ import { BASE_API_URL } from './constants'
 import { TJobItem, TJobItemExpanded } from './types'
 import { handleError } from './utils'
 import { BookmarksContext } from '../contexts/BookmarksContextProvider'
+import { ActiveIdContext } from '../contexts/ActiveIdContextProvider'
 
 type JobItemApiResponse = {
   public: boolean
@@ -22,15 +23,14 @@ const fetchJobItem = async (id: number): Promise<JobItemApiResponse> => {
 }
 
 export function useActiveId() {
-  const [activeId, setActiveId] = useState<number | null>(
-    +window.location.hash.slice(1) || null
-  )
+  const [activeId, setActiveId] = useState<number | null>(null)
 
   useEffect(() => {
     const handleHashChange = () => {
       const id = +window.location.hash.slice(1)
       setActiveId(id)
     }
+    handleHashChange()
     window.addEventListener('hashchange', handleHashChange)
 
     return () => {
@@ -162,6 +162,16 @@ export function useBookmarksContext() {
   if (!context) {
     throw new Error(
       'useBookmarksContext must be used within a BookmarksContextProvider'
+    )
+  }
+  return context
+}
+
+export function useActiveIdContext() {
+  const context = useContext(ActiveIdContext)
+  if (!context) {
+    throw new Error(
+      'useActiveIdContext must be used within a ActiveIdContextProvider'
     )
   }
   return context
