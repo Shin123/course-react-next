@@ -1,24 +1,20 @@
 import { ArrowDownIcon } from '@radix-ui/react-icons'
-import { SortBy } from '../lib/types'
+import { useJobItemsContext } from '../lib/hooks'
 
-type Props = {
-  onClick: (sortBy: SortBy) => void
-  sortBy: SortBy
-}
-
-export default function SortingControls({ onClick, sortBy }: Props) {
+export default function SortingControls() {
+  const { sortBy, handleChangeSortBy } = useJobItemsContext()
   return (
     <section className="sorting">
       <ArrowDownIcon />
 
       <SortingButton
-        onClick={() => onClick('relevant')}
+        onClick={() => handleChangeSortBy('relevant')}
         isActive={sortBy === 'relevant'}
       >
         Relevant
       </SortingButton>
       <SortingButton
-        onClick={() => onClick('recent')}
+        onClick={() => handleChangeSortBy('recent')}
         isActive={sortBy === 'recent'}
       >
         Recent

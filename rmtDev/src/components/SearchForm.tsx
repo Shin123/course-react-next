@@ -1,12 +1,10 @@
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
+import { useSearchTextContext } from '../lib/hooks'
 
-type Props = {
-  searchText: string
-  setSearchText: React.Dispatch<React.SetStateAction<string>>
-}
-export default function SearchForm({ searchText, setSearchText }: Props) {
+export default function SearchForm() {
+  const { searchText, handleChangeSearchText } = useSearchTextContext()
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchText(e.target.value)
+    handleChangeSearchText(e.target.value)
   }
   return (
     <form action="#" className="search">

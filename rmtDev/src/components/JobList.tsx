@@ -10,6 +10,7 @@ type Props = {
 
 export default function JobList({ jobItems, isLoading }: Props) {
   const { activeId } = useActiveIdContext()
+
   return (
     <ul className="job-list">
       {isLoading && <Spinner />}
